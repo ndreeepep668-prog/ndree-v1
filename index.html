@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Attack Target</title>
+  <style>
+    body {
+      background: #000;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #fff;
+      flex-direction: column;
+    }
+    .box {
+      background: rgba(20, 20, 20, 0.9);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #ff00ff, 0 0 40px #8000ff;
+      text-align: center;
+      width: 350px;
+    }
+    h2 {
+      color: #ff0080;
+      text-shadow: 0 0 10px #ff00ff, 0 0 20px #8000ff;
+      margin-bottom: 20px;
+    }
+    input, select {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      width: 80%;
+      border-radius: 10px;
+      border: none;
+      text-align: center;
+    }
+    button {
+      margin: 8px;
+      background: linear-gradient(45deg, #ff0040, #ff00ff);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 10px #ff00ff, 0 0 20px #8000ff;
+      transition: 0.3s;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+    #result, #attack-result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    /* Progress bar */
+    .progress-container {
+      width: 100%;
+      background: #333;
+      border-radius: 10px;
+      margin-top: 15px;
+      height: 20px;
+      display: none;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff0040, #ff00ff);
+      border-radius: 10px;
+      transition: width 0.1s;
+      box-shadow: 0 0 10px #ff00ff, 0 0 20px #8000ff;
+    }
+    .credit {
+      margin-top: 20px;
+      color: #888;
+      font-size: 14px;
+      text-shadow: 0 0 5px #ff00ff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Page -->
+  <div class="box" id="login-box">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="result"></p>
+  </div>
+
+  <!-- Attack Target Page (hidden at first) -->
+  <div class="box" id="attack-box" style="display:none;">
+    <h2>Attack Target</h2>
+    <input type="text" id="target" placeholder="Masukkan Target ID">
+    <select id="delay">
+      <option value="fast">Crash Delay - Cepat</option>
+      <option value="normal">Crash Delay - Normal</option>
+      <option value="slow">Crash Delay - Lambat</option>
+    </select>
+    <br>
+    <button onclick="sendBug()">Kirim Bug</button>
+    <button onclick="goBack()">Kembali</button>
+
+    <!-- Progress bar -->
+    <div class="progress-container" id="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <p id="progress-text"></p>
+    <p id="attack-result"></p>
+  </div>
+
+  <p class="credit">By ndree xiterz</p>
+
+  <script>
+    // Login function
+    function login() {
+      const user = document.getElementById("username").value;
+      const pw = document.getElementById("password").value;
+      const result = document.getElementById("result");
+
+      if (user === "ndree v1" && pw === "ndree") {
+        result.innerHTML = "✅ Login berhasil!";
+        result.style.color = "lime";
+
+        // tampilkan halaman Attack Target
+        document.getElementById("login-box").style.display = "none";
+        document.getElementById("attack-box").style.display = "block";
+      } else {
+        result.innerHTML = "❌ Username atau password salah!";
+        result.style.color = "red";
+      }
+    }
+
+    // Attack Target simulation
+    function sendBug() {
+      const target = document.getElementById("target").value;
+      const delay = document.getElementById("delay").value;
+      const progressContainer = document.getElementById("progress-container");
+      const progressBar = document.getElementById("progress-bar");
+      const progressText = document.getElementById("progress-text");
+      const result = document.getElementById("attack-result");
+
+      if (target.trim() === "") {
+        result.innerHTML = "⚠️ Masukkan ID target terlebih dahulu!";
+        result.style.color = "yellow";
+        return;
+      }
+
+      // Reset progress bar
+      progressContainer.style.display = "block";
+      progressBar.style.width = "0%";
+      progressText.innerHTML = "0%";
+      result.innerHTML = "";
+
+      let progress = 0;
+      let interval = setInterval(() => {
+        progress++;
+        progressBar.style.width = progress + "%";
+        progressText.innerHTML = progress + "%";
+
+        if (progress >= 100) {
+          clearInterval(interval);
+          result.innerHTML = `🚀 Bug terkirim ke ${target} dengan delay: ${delay}`;
+          result.style.color = "lime";
+        }
+      }, 50); // kecepatan progress
+    }
+
+    // Go Back function
+    function goBack() {
+      const result = document.getElementById("attack-result");
+      result.innerHTML = "⬅️ Kembali ke menu sebelumnya";
+      result.style.color = "cyan";
+    }
+  </script>
+</body>
+</html>
